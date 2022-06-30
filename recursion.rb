@@ -1,3 +1,4 @@
+require "byebug"
 def range(start, ending)
     if ending <= start
         return []
@@ -124,3 +125,55 @@ def binary_search(array, target)
     end  
 end
 
+def merge_sort(array)
+    if array.length <= 1
+        return array
+    end
+
+    mid_idx =  array.length / 2
+    left = array[0...mid_idx]
+    right = array[mid_idx..-1]
+    sort_left = merge_sort(left)
+    sort_right = merge_sort(right)
+    merge(sort_left, sort_right)
+end
+
+def merge(left, right)
+    new_arr = left + right
+    new_arr = new_arr.sort
+    new_arr
+end
+
+# arr = [38, 27, 43, 3, 9, 82, 10]
+# new_arr = [38, 27, 43, 3]
+# new_arr_2 = [9, 82, 10]
+# p merge(new_arr, new_arr_2)
+# p merge_sort(arr)
+
+def greedy_make_change(num, denoms)
+    return [] if num == 0
+    change = []
+    if num - denoms[0] >= 0
+        change << denoms[0]
+        change += greedy_make_change(num - denoms[0], denoms)
+    else
+        denoms.shift 
+        change += greedy_make_change(num, denoms)
+    end
+
+    return change
+end
+
+
+# p greedy_make_change(24, [10, 7, 1])
+
+def make_better_change(num, array)
+    new_arr = []
+    new_num = num - array[0]
+    new_arr << array[0]
+    return new_arr if new_num == array[1]
+    make_better_change(new_num, array[1..-1])
+    return new_arr
+end
+
+p make_better_change(24, [10, 7, 1])
